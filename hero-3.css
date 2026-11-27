@@ -1,0 +1,225 @@
+/* ============================================================
+   HERO 3 · "Collage vivo" — overrides loaded after styles-v4.css
+   The greeting is the spine. Real kids and teachers, cut into the
+   system's two masks (speech bubble, circle), tuck into its gaps:
+   the big group shot BEHIND the letters, the circles IN FRONT.
+   Under it all, the logo's geometry at full scale: the brand-blue
+   ground, the red bowl and the white ring of the i.
+   Every piece is placed in em of the headline (--F), so the
+   collage stays locked to the letterforms at any size; each
+   breakpoint only re-art-directs the em coordinates.
+   ============================================================ */
+
+/* ---------- HEADER: blue while it sits on the hero ---------- */
+.top { transition: background-color 0.3s, color 0.3s, box-shadow 0.25s; }
+.brand-mk { position: relative; display: block; flex: none; width: 40px; height: 40px; }
+.brand .brand-mk img { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 0.3s; }
+.brand-mk-w { opacity: 0; }
+@media (min-width: 1180px) { .brand-mk { width: 44px; height: 44px; } }
+
+html.js .top:not(.is-past) { background: var(--blue); color: var(--white); box-shadow: none; }
+html.js .top:not(.is-past) .brand-mk-c { opacity: 0; }
+html.js .top:not(.is-past) .brand-mk-w { opacity: 1; }
+html.js .top:not(.is-past) :focus-visible { outline-color: var(--white); }
+.menu-btn { color: var(--blue); }
+@media (min-width: 1180px) {
+  html.js .top:not(.is-past) .nav-list a:hover { background: rgba(255, 255, 255, 0.14); }
+}
+
+/* ---------- HERO ---------- */
+.hc {
+  --F: 150px;
+  /* stage width, patio width & height — in px-like units only, so they mean the same on every piece */
+  --sw: calc(min(100vw, var(--wrap)) - 2 * var(--gut));
+  --pw: calc(var(--F) * 2);
+  --ph: calc(var(--pw) / 1.5);
+  position: relative; isolation: isolate;
+  display: grid; align-items: center;
+  min-height: calc(100vh - var(--head));
+  min-height: calc(100svh - var(--head));
+  padding: 0;
+  background: var(--blue); color: var(--white);
+  overflow: clip;
+  /* the hero is one big speech bubble: round corner bottom-left, square tail where the bowl stands */
+  border-bottom-left-radius: var(--bowl);
+}
+.hc :focus-visible { outline-color: var(--white); }
+.hc-grid { position: relative; display: block; padding-block: 14px 30px; }
+.hc-stage { position: relative; font-size: var(--F); }
+
+.hc .hello { font-size: 1em; margin-left: -0.045em; position: static; z-index: auto; }
+.hc .hello-ln { position: relative; z-index: 3; width: max-content; }
+
+/* pieces — positions are em of the headline; the stamp and the note carry
+   their own small type, so they are placed with var(--F) instead */
+.hc-bowl, .hc-ring, .hc-ph, .hc-seal, .hc-note { position: absolute; }
+.hc-bowl { z-index: 0; right: 0; width: auto; aspect-ratio: 1 / 2; border-radius: 100% 0 0 100% / 50% 0 0 50%; background: var(--red); transform-origin: 100% 50%; }
+.hc-ring { z-index: 1; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--white); }
+.hc-ph img { background: var(--blue-ink); }
+
+/* the group shot: a speech bubble (square corner = the tail), cropped below the grey roofline */
+.hc-patio {
+  z-index: 2; width: var(--pw); height: var(--ph);
+  border-radius: calc(var(--pw) * 0.3) calc(var(--pw) * 0.3) calc(var(--pw) * 0.3) 0;
+  overflow: hidden; container-type: normal;
+}
+.hc-patio img { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; object-position: 50% 100%; scale: var(--pz, 1.12); transform-origin: 50% 100%; }
+/* the pin sits on the umbrella's canopy (moves with the crop) */
+.hc-tag { --x: 49%; --y: 20%; }
+
+/* circles cut from the ground: a blue keyline separates them from whatever they overlap */
+.hc .ph-dot { z-index: 4; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 max(4px, 0.02em) var(--blue); }
+.hc .ph-dot img { border-radius: 0; }
+/* the teachers wear the i's ring */
+.hc-team { outline: max(2px, 0.008em) solid var(--white); outline-offset: max(9px, 0.042em); }
+.hc-team img { scale: 1.3; transform-origin: 47% 50%; }
+.hc-chef { z-index: 4; }
+.hc-chef img { scale: 1.22; transform-origin: 44% 52%; }
+/* second dictionary tag: pinned on a chef's hat, outside the circle's mask (phones and tablets) */
+.hc-tag2 { --x: 46%; --y: 40%; z-index: 5; display: none; }
+.hc-hair img { scale: 1.35; transform-origin: 46% 40%; }
+
+.hc-seal {
+  z-index: 6; margin: 0;
+  width: calc(var(--F) * 0.5); height: calc(var(--F) * 0.5); min-width: 84px; min-height: 84px;
+  font-size: clamp(11px, calc(var(--F) * 0.05), 15px);
+  transform: none; rotate: -9deg;
+  box-shadow: 0 0 0 max(4px, calc(var(--F) * 0.02)) var(--blue);
+}
+.hc-seal::before { inset: 5px; border-width: 2px; }
+.hc-seal span { max-width: 6.5em; line-height: 1.02; }
+.hc-seal b { font-size: 2.6em; }
+
+/* the teacher's red pen (pink on blue), written in the margin between "Hello," and "vera" */
+.hc-note {
+  z-index: 6; align-items: center; gap: 2px;
+  left: calc(var(--F) * 0.8); top: calc(var(--F) * 0.775);
+  color: var(--pink); font-size: clamp(15px, calc(var(--F) * 0.062), 19px);
+}
+.hc-note svg { width: 2.4em; height: 1.75em; translate: 0 -0.45em; rotate: -26deg; }
+
+.hc-copy { position: relative; z-index: 5; }
+.hc .hero-lede { color: var(--white); }
+.hc .link { color: var(--white); text-decoration-color: var(--red); text-decoration-thickness: 3px; }
+.hc .link:hover { color: var(--white); text-decoration-color: var(--white); }
+
+/* ---------- PHONE ---------- */
+@media (max-width: 719.98px) {
+  .hc {
+    --F: clamp(96px, min(calc((100vw - 2 * var(--gut)) / 2.2), calc((100svh - var(--head) - 300px) / 2.45)), 300px);
+    --pw: var(--sw);
+    /* the group photo takes whatever height the copy leaves (the copy needs more room on narrow phones) */
+    --keep: clamp(225px, calc(280px - (100vw - 360px) * 1.7), 280px);
+    --ph: clamp(calc(var(--F) * 1.15), calc(100svh - var(--head) - var(--F) * 1.24 - var(--keep)), calc(var(--F) * 1.9));
+    align-items: start;
+  }
+  .hc-stage { height: calc(var(--F) * 1.3 + var(--ph)); }
+  .hc-patio { --pz: 1.22; left: 0; top: 1.24em; }
+  .hc-tag { display: none; }
+  .hc-tag2 { display: block; }
+  .hc-tag2 .tag-card { padding: 7px 11px 8px 10px; font-size: 13px; }
+  .hc-tag2 .tag-card b { font-size: 15px; }
+  .hc-team { left: 1.58em; top: 0.04em; width: 0.66em; }
+  .hc-team img { scale: 1.7; transform-origin: 50% 44%; } /* small circle: come closer to five faces */
+  .hc-bowl { top: calc(14px - var(--F) * 0.43); height: calc(var(--F) * 1.6); }
+  .hc-ring, .hc-hair, .hc-note { display: none; }
+  .hc-chef { right: -0.06em; top: calc(1.24em + var(--ph) - 0.5em); width: 0.56em; }
+  .hc-seal { left: calc(var(--F) * -0.04); top: calc(var(--F) * 1.24 + var(--ph) - var(--F) * 0.42); }
+  .hc-copy { margin-top: 20px; }
+  /* on phones the stamp already says "36 años en Rivera": the lede keeps to the promise */
+  .hc-long { display: none; }
+}
+
+/* ---------- TABLET (portrait, up to small laptops held upright) ----------
+   Type on top with a big portrait in its pocket; the group shot spans the left
+   three quarters under "Rivera."; circles and the stamp step down its right edge. */
+@media (min-width: 720px) and (max-width: 1279.98px) and (orientation: portrait) {
+  .hc {
+    --F: clamp(120px, min(calc(var(--sw) / 2.24), calc((100svh - var(--head) - 600px) / 1.2)), 300px);
+    --pw: calc(var(--sw) * 0.74);
+    --ph: clamp(calc(var(--F) * 0.8), calc(100svh - var(--head) - var(--F) * 1.34 - 300px), calc(var(--pw) * 0.72));
+    align-items: start;
+  }
+  .hc-grid { padding-block: 26px 40px; }
+  .hc-stage { height: calc(var(--F) * 1.34 + var(--ph)); }
+  .hc-bowl { top: calc(26px - var(--F) * 0.42); height: calc(var(--F) * 1.66); }
+  .hc-ring, .hc-tag { display: none; }
+  .hc-tag2 { display: block; }
+  .tag--l.hc-tag2 .tag-card { left: 9px; right: auto; border-radius: 16px 16px 16px 3px; }
+  .hc-team { left: 1.6em; top: 0.02em; width: 0.7em; }
+  .hc-patio { --pz: 1.16; left: 0; top: 1.34em; }
+  .hc-chef { left: calc(var(--pw) - 0.22em); top: max(1.64em, calc(1.34em + var(--ph) * 0.52 - 0.31em)); width: 0.62em; }
+  .hc-seal { left: calc(var(--pw) - var(--F) * 0.36); top: calc(var(--F) * 1.34 + var(--ph) - var(--F) * 0.06); }
+  .hc-hair { left: calc(var(--pw) + 0.18em); top: calc(1.34em + var(--ph) + 0.12em); width: 0.46em; }
+  /* the lede stops short of the stamp; the CTA row keeps its full width */
+  .hc-copy { margin-top: 28px; max-width: none; }
+  .hc .hero-lede { max-width: min(30rem, calc(var(--pw) - var(--F) * 0.44)); font-size: 21px; }
+}
+
+/* ---------- DESKTOP & every landscape screen from 720px ----------
+   Headline and copy on the left; the collage fills the room right of "Rivera."
+   and runs into the red bowl standing on the right edge. */
+@media (min-width: 720px) and (orientation: landscape), (min-width: 1280px) {
+  .hc { --F: clamp(100px, min(20.6vw, calc((100svh - var(--head) - 270px) / 1.64)), 300px); }
+  .hc-grid { padding-block: 30px 44px; }
+  /* the group shot fills the room right of "Rivera.", up to ~70% of the hero's height,
+     and never reaches below the headline block (where the copy starts) */
+  .hc { --pw: min(calc(var(--sw) - var(--F) * 2), calc((100svh - var(--head) - 74px) * 1.05), calc((var(--F) * 1.64 + 12px) * 1.5)); }
+  .hc-stage { height: 1.64em; }
+  /* the copy stops short of the chef circle */
+  .hc-copy { margin-top: 26px; max-width: min(36rem, calc(var(--F) * 2 + var(--pw) * 0.22 - 28px)); }
+  .hc .hero-lede { font-size: clamp(19px, 1.5vw, 23px); }
+
+  /* the B's red bowl: a half-disc as tall as the hero, standing on its right edge;
+     the ring of the i follows it at a distance, like the stamps' offset outline */
+  .hc-bowl { top: 0; height: 100%; }
+  .hc-ring { --g: calc(var(--F) * 0.1); top: calc(-1 * var(--g)); bottom: calc(-1 * var(--g)); right: 0; width: auto; aspect-ratio: 1; translate: 50% 0; }
+  .hc-patio { left: 2em; top: 0.04em; }
+  .hc-team { left: 1.54em; top: 0.08em; width: 0.8em; }
+  .hc-hair { left: calc(2em + var(--pw) - 0.3em); top: -0.1em; width: 0.44em; }
+  .hc-chef { left: calc(2em + var(--pw) * 0.22); top: calc(var(--ph) - 0.12em); width: 0.6em; }
+  .hc-seal { left: calc(var(--F) * 2 + var(--pw) - var(--F) * 0.62); top: calc(var(--ph) - var(--F) * 0.05); }
+}
+
+/* small landscape screens: the headline is too small to host the note in its margin */
+@media (orientation: landscape) and (max-height: 640px), (orientation: landscape) and (max-width: 899px) {
+  .hc-note { display: none; }
+}
+
+/* ---------- ENTRANCE — one choreographed sequence, ~1.4 s ----------
+   Parked pieces sit off their marks but never disappear: if frames stall at any
+   moment the collage is still all there and every word still reads. Only the
+   individual transform properties move; parallax owns `transform`. */
+.hc .ibar { transform-origin: 50% 100%; }
+.hc.hc-pre:not(.is-in) .hc-bowl  { scale: 0.55; }                                   /* the bowl swells from the edge */
+.hc.hc-pre:not(.is-in) .hc-ring  { scale: 0.8; }
+.hc.hc-pre:not(.is-in) .hc-l1    { translate: 0 0.1em; }
+.hc.hc-pre:not(.is-in) .hc-l2    { translate: 0 0.14em; }
+.hc.hc-pre:not(.is-in) .ibar     { scale: 1 0.5; }                                  /* the i stands up */
+.hc.hc-pre:not(.is-in) .hc-patio { translate: 0 0.45em; rotate: 8deg; scale: 0.88; } /* the group rises */
+.hc.hc-pre:not(.is-in) .hc-team  { translate: 1.6em 0; rotate: 200deg; }             /* circles roll in */
+.hc.hc-pre:not(.is-in) .hc-chef  { translate: 0 1em; rotate: -150deg; }
+.hc.hc-pre:not(.is-in) .hc-hair  { translate: 0 -0.8em; rotate: 120deg; }
+.hc.hc-pre:not(.is-in) .hc-seal  { scale: 1.8; rotate: -70deg; }                   /* and the stamp comes down */
+.hc.hc-pre:not(.is-in) .hc-tag, .hc.hc-pre:not(.is-in) .hc-tag2 { scale: 0.5; }
+.hc.hc-pre:not(.is-in) .hc-note  { translate: 0 12px; }
+.hc.hc-pre:not(.is-in) .hc-copy  { translate: 0 16px; }
+
+.hc.is-in:not(.is-done) .hc-bowl  { transition: scale 1s var(--ease); }
+.hc.is-in:not(.is-done) .hc-ring  { transition: scale 1.1s var(--ease) 0.08s; }
+.hc.is-in:not(.is-done) .hc-l1    { transition: translate 0.8s var(--ease); }
+.hc.is-in:not(.is-done) .hc-l2    { transition: translate 0.8s var(--ease) 0.06s; }
+.hc.is-in:not(.is-done) .ibar     { transition: scale 0.5s var(--roll) 0.2s; }
+.hc.is-in:not(.is-done) .hc-patio { transition: translate 0.9s var(--ease) 0.1s, rotate 0.9s var(--ease) 0.1s, scale 0.9s var(--ease) 0.1s; }
+.hc.is-in:not(.is-done) .hc-team  { transition: translate 1s var(--ease) 0.28s, rotate 1s var(--ease) 0.28s; }
+.hc.is-in:not(.is-done) .hc-chef  { transition: translate 0.9s var(--ease) 0.42s, rotate 0.9s var(--ease) 0.42s; }
+.hc.is-in:not(.is-done) .hc-hair  { transition: translate 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.55s, rotate 0.7s var(--ease) 0.55s; }
+.hc.is-in:not(.is-done) .hc-seal  { transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s, rotate 0.5s var(--ease) 0.8s; }
+.hc.is-in:not(.is-done) .hc-tag, .hc.is-in:not(.is-done) .hc-tag2 { transition: scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 1s; }
+.hc.is-in:not(.is-done) .hc-note  { transition: translate 0.5s var(--ease) 0.9s; }
+.hc.is-in:not(.is-done) .hc-copy  { transition: translate 0.8s var(--ease) 0.15s; }
+
+/* reduced motion: the inline script never parks the pieces, so the collage is simply there */
+@media (prefers-reduced-motion: reduce) {
+  .hc [data-d], .hc .hello-ln, .hc .ibar, .hc-copy, .hc-tag, .hc-tag2 { transition: none !important; }
+}

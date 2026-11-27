@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "Instituto Británico - Landing v3.html"
+        ],
+        "createdAt": "2026-10-28T20:11:24.987Z",
+        "reason": "Claude: static HTML scan can't see styles-v3.css paddings; rendered-page detect on the dev server reports 0 cramped-padding"
+      }
+    ]
+  }
+}

@@ -1,0 +1,267 @@
+/* ============================================================
+   Hero variant 2 · "El globo" — overrides loaded after styles-v4.css
+   A flat poster on brand blue. The kids in the circle are SAYING it:
+   a white speech bubble ("Hello," ⇄ "Hola,") points its tail at them,
+   and "Rivera." stands underneath in white with the logo's red i.
+   Built from the logo's geometry: the ring (the photo's white ring,
+   the stamp), the bowl (a red disc cropped by the edges, the hero's
+   bottom corner), the bar (the i).
+   Every size is driven by three numbers per layout:
+     --R  "Rivera." font size     --H  "Hello," font size
+     --D  photo circle diameter
+   Final states are the CSS defaults; the load motion only runs while
+   hero-2.js keeps .h2-intro on the section (removed on a timer).
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   HEADER — blue over the hero, back to white once it has passed
+   (hero-2.js sets .h2-past). Without JS it simply stays blue.
+   ------------------------------------------------------------ */
+.top {
+  background: var(--blue); color: var(--white);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.25s;
+}
+.top.is-scrolled { box-shadow: none; }
+.brand-marks { display: grid; flex: none; }
+.brand-marks img { grid-area: 1 / 1; transition: opacity 0.3s; }
+.brand-mark-c { opacity: 0; }
+.top .menu-btn { background: var(--white); color: var(--blue); transition: background-color 0.3s; }
+.top :focus-visible { outline-color: var(--white); }
+@media (min-width: 1180px) {
+  .top .nav-list a:hover { background: rgba(255, 255, 255, 0.14); }
+}
+
+html:not(.menu-open) .top.h2-past { background: var(--white); color: var(--blue); }
+html:not(.menu-open) .top.h2-past.is-scrolled { box-shadow: 0 2px 0 var(--blue-15); }
+html:not(.menu-open) .top.h2-past .brand-mark-w { opacity: 0; }
+html:not(.menu-open) .top.h2-past .brand-mark-c { opacity: 1; }
+html:not(.menu-open) .top.h2-past .menu-btn { background: var(--sky); }
+html:not(.menu-open) .top.h2-past :focus-visible { outline-color: var(--red); }
+@media (min-width: 1180px) {
+  html:not(.menu-open) .top.h2-past .nav-list a:hover { background: var(--sky); }
+}
+
+/* ------------------------------------------------------------
+   THE POSTER
+   ------------------------------------------------------------ */
+.hero.h2 {
+  /* phone: photo on top bleeding off the right edge, the bubble
+     climbing onto it, "Rivera." filling the width under it */
+  --R: min(calc((100vw - 2 * var(--gut)) / 2.22), 18.5svh);
+  --H: calc(var(--R) * 0.7);
+  --D: min(88vw, 41svh, calc(100svh - 496px), 440px);
+  --S: clamp(84px, calc(var(--D) * 0.3), 150px);   /* stamp */
+  --ring: clamp(5px, calc(var(--D) * 0.017), 10px);
+  /* crop of the photo, in px of the 800-wide file: left, top, side */
+  --cx: 236; --cy: 186; --cs: 384;
+  /* the bubble's tail: anchored on the bubble's edge (ax, ay), turned
+     by ta (0 = pointing up and a little right); tip = where it points */
+  --ax: calc(100% - 0.5em); --ay: 0.14em; --ta: 10deg;
+  --tl-w: 0.62em; --tl-h: 0.74em;
+  --tip: calc(100% + 0.05em) -0.5em;
+  --corner: clamp(64px, 17vw, 220px);
+
+  position: relative; overflow: clip;
+  display: grid;
+  min-height: calc(100vh - var(--head));
+  min-height: calc(100svh - var(--head));
+  padding: 0;
+  background: var(--blue); color: var(--white);
+  /* the B's bowl: the poster hands over to Cursos with one big round corner */
+  border-bottom-right-radius: var(--corner);
+}
+
+.h2-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "photo" "title" "copy";
+  align-content: center;
+  padding-top: 8px; padding-bottom: 30px;
+}
+
+/* --- the kids --- */
+.h2-photo {
+  grid-area: photo; position: relative; z-index: 1;
+  width: var(--D); aspect-ratio: 1;
+  justify-self: end;
+  margin-right: calc(-1 * var(--gut) - var(--D) * 0.1);
+}
+.h2-frame {
+  position: absolute; inset: 0; z-index: 1;
+  border-radius: 50%; overflow: hidden;
+  background: var(--blue-ink);
+  box-shadow: 0 0 0 var(--ring) var(--white);
+}
+.h2-frame img {
+  position: absolute; max-width: none; height: auto;
+  width: calc(800 / var(--cs) * 100%);
+  left: calc(var(--cx) / var(--cs) * -100%);
+  top: calc(var(--cy) / var(--cs) * -100%);
+}
+/* the bowl: a red disc the size of the photo, slid off-centre and cropped by the poster's edge */
+.h2-disc {
+  position: absolute; z-index: 0;
+  width: 100%; height: 100%; left: -16%; top: -13%;
+  border-radius: 50%; background: var(--red);
+}
+/* dictionary tag on the umbrella (only where the crop shows it) */
+.h2-tag { display: none; z-index: 3; left: calc((396 - var(--cx)) / var(--cs) * 100%); top: calc((178 - var(--cy)) / var(--cs) * 100%); }
+/* 36 años: a rubber stamp, red ink on white, thumped onto the ring */
+.h2-stamp {
+  --rot: -12deg;
+  position: absolute; z-index: 4; left: -3%; top: 3%;
+  width: var(--S); height: var(--S);
+  background: var(--white); color: var(--red);
+  font-size: calc(var(--S) * 0.104); line-height: 1.02;
+  transform: rotate(var(--rot));
+  box-shadow: 0 0 0 calc(var(--S) * 0.03) var(--red);
+}
+.h2-stamp::before { inset: calc(var(--S) * 0.055); border: 2px solid var(--red); }
+.h2-stamp span { max-width: 6.4em; }
+.h2-stamp b { font-size: calc(var(--S) * 0.4); }
+
+/* --- the words --- */
+.h2 .hello { font-size: var(--R); margin-left: 0; }
+.h2-title {
+  grid-area: title; position: relative; z-index: 2;
+  justify-self: start; width: fit-content;
+  /* the bubble climbs onto the bottom of the photo */
+  margin-top: calc(var(--H) * -0.66);
+}
+.h2-say {
+  position: relative; width: fit-content;
+  font-size: var(--H); line-height: 0.86;
+  padding: 0.15em 0.26em 0.19em 0.2em;
+  background: var(--white); color: var(--blue);
+  border-radius: 0.36em;
+  transform-origin: var(--tip);
+}
+.h2-say-t { display: block; }
+.h2-tail {
+  position: absolute; z-index: -1;
+  left: calc(var(--ax) - 0.3 * var(--tl-w)); top: calc(var(--ay) - var(--tl-h));
+  width: var(--tl-w); height: var(--tl-h); max-width: none;
+  transform-origin: 30% 100%; transform: rotate(var(--ta));
+  fill: var(--white); overflow: visible;
+}
+.h2-city { margin-top: 0.06em; margin-left: -0.04em; }
+.h2 .ibar::after { border-color: var(--white); }
+
+/* --- the copy --- */
+.h2-copy { grid-area: copy; margin-top: clamp(14px, 2.2svh, 26px); max-width: 34rem; }
+.h2 .hero-lede { font-size: clamp(17px, 1.6vw, 22px); line-height: 1.42; font-weight: 500; }
+.h2 .hero-cta { margin-top: clamp(14px, 2.2svh, 26px); }
+.h2 .link { color: var(--white); text-decoration-color: var(--pink); }
+.h2 .link:hover { color: var(--pink); }
+.h2 :focus-visible { outline-color: var(--white); }
+
+/* ------------------------------------------------------------
+   TABLET (portrait) — same build, more air: the bubble sits beside
+   the circle's lower-left and "Rivera." spans the page
+   ------------------------------------------------------------ */
+@media (min-width: 640px) {
+  .hero.h2 {
+    --R: min(calc((100vw - 2 * var(--gut)) / 2.22), 27svh);
+    --H: calc(var(--R) * 0.56);
+    --D: min(60vw, 48svh, 600px);
+    --cx: 196; --cy: 118; --cs: 452;
+    /* the tail leaves the bubble's right side, up into the circle */
+    --ax: calc(100% - 0.14em); --ay: 0.52em; --ta: 46deg;
+    --tl-w: 0.56em; --tl-h: 0.66em;
+    --tip: calc(100% + 0.6em) 0.3em;
+  }
+  .h2-grid { padding-top: 14px; padding-bottom: 36px; }
+  .h2-photo { margin-right: calc(-1 * var(--gut) - var(--D) * 0.05); }
+  /* the bubble sits beside the circle's lower-left, "Rivera." right under the circle */
+  .h2-title { margin-top: calc(var(--H) * -1.24); }
+  .h2-tag { display: block; }
+  /* lede and buttons side by side, so "Rivera." can take the whole width */
+  .h2-copy { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 32px; align-items: end; max-width: none; }
+  .h2 .hero-lede { font-size: 19px; max-width: 30ch; }
+  .h2 .hero-cta { margin-top: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+/* ------------------------------------------------------------
+   DESKTOP (landscape) — words on the left, the kids on the right.
+   The bubble hangs over the end of "Rivera.", overlaps the circle's
+   ring where the photo is only wall, and its tail drops into the kids.
+   ------------------------------------------------------------ */
+@media (min-width: 900px) and (orientation: landscape) {
+  .hero.h2 {
+    --R: min(19vw, 27svh, 330px);
+    --H: calc(var(--R) * 0.8);
+    --D: min(46vw, calc((100svh - var(--head)) * 0.8), 720px);
+    --tw: calc(var(--R) * 2.24);                        /* "Rivera." is the text column */
+    --cw: calc(min(100vw, var(--wrap)) - 2 * var(--gut));
+    /* gap between "Rivera." and the circle: tight, unless the screen is wide and short */
+    --G: clamp(calc(var(--R) * 0.1), calc((var(--cw) - var(--tw) - var(--D)) * 0.45), calc(var(--R) * 0.6));
+    --cx: 156; --cy: 92; --cs: 508;
+    --ax: calc(100% - 0.7em); --ay: calc(100% - 0.14em); --ta: 96deg;
+    --tl-w: 0.56em; --tl-h: 0.66em;
+    --tip: calc(100% - 0.08em) calc(100% + 0.36em);
+    /* on wide screens the bowl moves under the words, away from the circle */
+    border-bottom-right-radius: 0; border-bottom-left-radius: var(--corner);
+  }
+  .h2-grid {
+    grid-template-columns: var(--tw) minmax(0, 1fr);
+    grid-template-areas: "title photo" "copy photo";
+    align-content: center;
+    padding-top: 28px; padding-bottom: 40px;
+  }
+  .h2-photo { align-self: center; justify-self: start; margin: 0 0 0 var(--G); }
+  .h2-disc { left: 17%; top: -15%; }
+  .h2-stamp { --rot: -10deg; left: auto; right: 9%; top: auto; bottom: -3%; }
+  .h2-title { margin-top: 0; }
+  /* the bubble hangs past the end of "Rivera." and lands on the circle's ring */
+  .h2-say { margin-left: auto; margin-right: calc(-1 * (var(--G) + var(--R) * 0.24)); }
+  .h2-copy { display: block; align-self: start; max-width: 100%; }
+  .h2 .hero-lede { font-size: clamp(17px, min(1.55vw, 2.9svh), 22px); max-width: none; }
+  .h2 .hero-cta { margin-top: clamp(14px, 2.2svh, 26px); flex-direction: row; align-items: center; gap: 14px 26px; }
+}
+/* tall enough: centre the circle on the line between the bubble and "Rivera.",
+   so the bubble overlaps its ring (only wall there) and the period tucks into its curve */
+@media (min-width: 900px) and (orientation: landscape) and (min-height: 760px) {
+  .h2-grid { padding-top: calc(max(0px, var(--D) / 2 - 1.2 * var(--H)) + 28px); }
+  .h2-photo { align-self: start; margin-top: calc(1.2 * var(--H) - var(--D) / 2); }
+  .h2-say { margin-right: calc(-1 * (var(--G) + var(--R) * 0.2)); }
+  /* the stamp moves off the photo into the corner the stepped headline leaves open,
+     over "Ri", beside the greeting (offsets are measured from the photo's box) */
+  .hero.h2 { --S: clamp(120px, calc(var(--R) * 0.7), 200px); }
+  .h2-stamp {
+    --rot: -11deg; right: auto; bottom: auto;
+    left: calc(-1 * (var(--tw) + var(--G)) + var(--R) * 0.03);
+    top: calc(var(--D) / 2 - 1.2 * var(--H) + (1.2 * var(--H) - var(--S)) / 2);
+  }
+}
+
+/* ------------------------------------------------------------
+   LOAD MOTION — one moment: the photo rolls in like a wheel, the red
+   bowl swells behind it, the bubble pops out of its tail, the stamp
+   thumps down. Transform/opacity only; hero-2.js removes .h2-intro on
+   a timer so the resting state never depends on an animation ending.
+   ------------------------------------------------------------ */
+@keyframes h2-roll { from { transform: translateX(62%) rotate(104deg); } }
+@keyframes h2-swell { from { transform: scale(0.2); } }
+@keyframes h2-pop {
+  0% { transform: scale(0.06) rotate(-14deg); opacity: 0; }
+  30% { opacity: 1; }
+  68% { transform: scale(1.07) rotate(1.5deg); }
+  100% { transform: none; }
+}
+@keyframes h2-thump {
+  0% { transform: scale(2.3) rotate(calc(var(--rot) - 34deg)); opacity: 0; }
+  50% { transform: scale(0.9) rotate(var(--rot)); opacity: 1; }
+  72% { transform: scale(1.04) rotate(var(--rot)); }
+  100% { transform: rotate(var(--rot)); }
+}
+@keyframes h2-tag { from { opacity: 0; transform: translateY(10px) scale(0.9); } }
+
+.h2.h2-intro .h2-frame { animation: h2-roll 0.95s cubic-bezier(0.16, 0.84, 0.3, 1) backwards; }
+.h2.h2-intro .h2-disc { animation: h2-swell 0.9s 0.08s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+.h2.h2-intro .h2-say { animation: h2-pop 0.62s 0.5s cubic-bezier(0.3, 0.6, 0.3, 1) backwards; }
+.h2.h2-intro .h2-stamp { animation: h2-thump 0.5s 0.95s cubic-bezier(0.5, 0, 0.6, 1) backwards; }
+.h2.h2-intro .h2-tag .tag-card,
+.h2.h2-intro .h2-tag .tag-pin { animation: h2-tag 0.4s 1.2s var(--ease) backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .h2 .h2-frame, .h2 .h2-disc, .h2 .h2-say, .h2 .h2-stamp, .h2 .h2-tag * { animation: none !important; translate: none !important; }
+}
